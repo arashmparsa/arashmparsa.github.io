@@ -228,6 +228,16 @@ h2.section-title {
   color: var(--tag-text); background: var(--tag-bg);
   padding: 3px 9px; border-radius: 6px;
 }
+.project-links { margin: 12px 0 0; }
+.repo-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 12.5px; font-weight: 500;
+  color: var(--teal);
+}
+.repo-link svg { width: 15px; height: 15px; fill: currentColor; }
+.repo-link:hover { color: var(--teal-deep); text-decoration: none; }
+.repo-link .arrow { transition: transform .15s ease; }
+.repo-link:hover .arrow { transform: translateX(3px); }
 
 /* ---------- CV / timeline ---------- */
 .cv-actions { display: flex; gap: 12px; flex-wrap: wrap; margin: 4px 0 8px; }
