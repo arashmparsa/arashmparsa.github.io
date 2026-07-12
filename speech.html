@@ -75,6 +75,20 @@
   footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);font-size:12.5px}
 
   @media (max-width:640px){table.libs{font-size:13px}.code pre,pre.flow{font-size:11.5px}#spec{height:150px}}
+
+  /* syntax highlighting — authentic Visual Studio (vs2015) dark token colors */
+  .code pre code.hljs{background:transparent;padding:0;color:#dcdcdc}
+  .hljs-keyword,.hljs-literal,.hljs-symbol,.hljs-name{color:#569cd6}
+  .hljs-built_in,.hljs-type{color:#4ec9b0}
+  .hljs-number,.hljs-class .hljs-title{color:#b8d7a3}
+  .hljs-string,.hljs-meta .hljs-string{color:#d69d85}
+  .hljs-subst,.hljs-function,.hljs-title,.hljs-params,.hljs-formula{color:#dcdcdc}
+  .hljs-comment,.hljs-quote{color:#57a64a;font-style:italic}
+  .hljs-doctag{color:#608b4e}
+  .hljs-meta,.hljs-meta .hljs-keyword,.hljs-tag{color:#9b9b9b}
+  .hljs-variable,.hljs-template-variable{color:#bd63c5}
+  .hljs-attr,.hljs-attribute{color:#9cdcfe}
+  .hljs-title.function_{color:#dcdcaa}
 </style>
 </head>
 <body>
@@ -111,7 +125,7 @@
     <h2>Before neural nets, a speaker was a GMM</h2>
     <p>The direct ancestor of the leak-detection GMM. Classic speech systems fit one Gaussian Mixture per speaker (or, via GMM-HMM, per phoneme) over MFCC frames, then identified a voice by whichever model gave the highest likelihood. Same <span class="mono">sklearn.mixture.GaussianMixture</span>, pointed at audio.</p>
     <p class="cite"><b>[1]</b> Reynolds &amp; Rose (1995), IEEE Trans. Speech &amp; Audio Processing 3(1):72–83 · doi:10.1109/89.365379</p>
-    <div class="code"><button class="cp">Copy</button><pre><code>"""
+    <div class="code"><button class="cp">Copy</button><pre><code class="language-python">"""
 The original speech model: a Gaussian Mixture over MFCC features.
 Ref: Reynolds, D. A. &amp; Rose, R. C. (1995). "Robust text-independent
 speaker identification using Gaussian mixture speaker models." IEEE
@@ -141,7 +155,7 @@ print("most likely speaker:", who)</code></pre></div>
     <h2>Whisper, the model that replaced the GMM-HMM</h2>
     <p>Modern ASR collapses the whole GMM-HMM-plus-language-model stack into one network. In practice this is a one-liner — <span class="mono">pip install openai-whisper</span> — and it returns text with per-segment timestamps.</p>
     <p class="cite"><b>[2]</b> Radford et al. (2023), arXiv:2212.04356 · OpenAI Whisper</p>
-    <div class="code"><button class="cp">Copy</button><pre><code>"""
+    <div class="code"><button class="cp">Copy</button><pre><code class="language-python">"""
 Voice -> words. One model replaces the entire GMM-HMM pipeline.
 Ref: Radford, A. et al. (2023). "Robust Speech Recognition via
 Large-Scale Weak Supervision." arXiv:2212.04356 (OpenAI Whisper).
@@ -167,7 +181,7 @@ for seg in result["segments"]:           # ...with timestamps
     <h2>Chain the transcript into ordinary NLP</h2>
     <p>There's no such thing as "NLP on raw audio" — you transcribe first, then run text models. The moment you have a string, sentiment, entities, intent, and summarization are all off-the-shelf.</p>
     <p class="cite"><b>[3]</b> Baevski et al. (2020), wav2vec 2.0, arXiv:2006.11477 · NeurIPS 2020</p>
-    <div class="code"><button class="cp">Copy</button><pre><code>"""
+    <div class="code"><button class="cp">Copy</button><pre><code class="language-python">"""
 Voice -> meaning. Transcribe, then treat it as text.
 Chain: Whisper (audio->text) -> sentiment + named entities.
 """
@@ -191,7 +205,7 @@ print("entities:", entities(text))       # people / places / orgs
     <h2>Isolation Forest for voice anomaly detection</h2>
     <p>This closes the loop: reuse the exact MFCC front-end from Method 00, summarize each clip into one fixed-length vector, and let an Isolation Forest flag clips that don't resemble the rest — an unfamiliar speaker, a spoof, a corrupted file.</p>
     <p class="cite"><b>[4]</b> Liu, Ting &amp; Zhou (2008), Isolation Forest, IEEE ICDM · doi:10.1109/ICDM.2008.17</p>
-    <div class="code"><button class="cp">Copy</button><pre><code>"""
+    <div class="code"><button class="cp">Copy</button><pre><code class="language-python">"""
 Voice anomaly detection. SAME MFCC front-end as the GMM above --
 only the back-end model changes.
 Ref: Liu, F. T., Ting, K. M. &amp; Zhou, Z.-H. (2008). "Isolation Forest."
@@ -253,7 +267,12 @@ for f, fl, s in zip(clips, flag, score):
   <div class="wrap">Companion to the GMM leak-detection note — same document system, retuned for audio. Citations verified via IEEE Xplore, arXiv, and the SciPy proceedings at time of writing. The spectrogram above is a synthetic illustration, not real audio.</div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
+  // syntax-highlight the Python blocks (no-op if the CDN is unreachable)
+  document.querySelectorAll('pre code.language-python').forEach(el=>{
+    if(window.hljs) hljs.highlightElement(el);
+  });
   (function(){
     const c=document.getElementById('spec'), x=c.getContext('2d');
     const W=c.width,H=c.height, cols=240, rows=64, cw=W/cols, rh=H/rows;
