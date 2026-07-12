@@ -47,3 +47,12 @@ assets/img/         (drop headshot.jpg here)
 assets/pdf/         résumé PDFs
 .nojekyll           tells GitHub Pages to serve files as-is
 ```
+
+## Notes tab (added)
+A new "Notes" tab (`notes.html`) sits in the top nav between Projects and CV. It's a
+tabbed page with an internal switcher between two technical notes:
+- `walkthrough.html` — anatomy of a verifiable AI-agent benchmark eval
+- `speech.html` — "From GMMs to Whisper" speech-ML companion note
+Both are embedded (auto-resizing) inside `notes.html`, but also open standalone.
+To edit either note, edit its own file. To add a third, add an <iframe> + a button
+in `notes.html`.

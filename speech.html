@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From GMMs to Whisper — working with voice in Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0f14; --panel:#151922; --code:#0b0e14; --raise:#1b2028;
+    --ink:#e9edf3; --soft:#b7c0cc; --muted:#7c8794; --line:#242b35;
+    --signal:#f2a75c; --cyan:#5ad1c8;
+    --disp:"Sora",system-ui,sans-serif;
+    --body:"IBM Plex Sans",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --wrap:940px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);
+    font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  a{color:var(--cyan)}
+  em{color:var(--soft)}
+
+  .hero{position:relative;border-bottom:1px solid var(--line);overflow:hidden}
+  #spec{display:block;width:100%;height:200px;filter:saturate(1.1)}
+  .hero-fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,15,20,.15),rgba(13,15,20,.92))}
+  .hero-cap{position:absolute;left:0;right:0;bottom:14px}
+  .hero-cap .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:#0d0f14;
+    background:var(--signal);padding:4px 10px;border-radius:999px}
+  .hero-cap span.note{font-family:var(--mono);font-size:12px;color:var(--soft)}
+
+  .intro{padding:34px 0 8px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--signal);margin:0 0 14px}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(27px,4.6vw,42px);line-height:1.05;
+    letter-spacing:-.02em;margin:0 0 14px;background:linear-gradient(90deg,#fff,#cfe8e4);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  p{margin:0 0 14px;max-width:70ch;color:var(--soft)}
+
+  section{padding:32px 0;border-top:1px solid var(--line)}
+  .step{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--cyan);margin:0 0 8px}
+  h2{font-family:var(--disp);font-weight:600;font-size:22px;letter-spacing:-.01em;margin:0 0 12px;color:var(--ink)}
+
+  .through{border-left:2px solid var(--signal);background:#16130d;border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:0 0 16px;color:var(--soft)}
+  .through b{color:var(--ink)}
+  pre.flow{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    font-family:var(--mono);font-size:12.5px;line-height:1.5;color:var(--soft);
+    padding:18px 20px;overflow-x:auto;margin:0}
+
+  .cite{font-family:var(--mono);font-size:12px;color:var(--muted);margin:0 0 8px}
+  .cite b{color:var(--cyan)}
+  .code{position:relative;margin:0 0 8px}
+  .code pre{background:var(--code);color:#d3e0e2;font-family:var(--mono);font-size:12.5px;
+    line-height:1.55;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:0;border:1px solid var(--line)}
+  .code .cp{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:11px;
+    color:var(--signal);background:#1a140b;border:1px solid #3a2c17;border-radius:6px;padding:3px 9px;cursor:pointer}
+  .code .cp:hover{background:#241a0e}
+  .code .cp.ok{color:#8fe0b0;border-color:#2a6b4d}
+
+  table.libs{width:100%;border-collapse:collapse;font-size:14px;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:6px 0 0}
+  table.libs th,table.libs td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--soft)}
+  table.libs th{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--panel)}
+  table.libs td.lib{font-family:var(--mono);font-size:13px;color:var(--cyan)}
+  table.libs tr:last-child td{border-bottom:0}
+
+  ol.refs{margin:0;padding-left:20px;font-size:13.5px;color:var(--muted)}
+  ol.refs li{margin:8px 0}
+  footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);font-size:12.5px}
+
+  @media (max-width:640px){table.libs{font-size:13px}.code pre,pre.flow{font-size:11.5px}#spec{height:150px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <canvas id="spec" width="1200" height="200" aria-hidden="true"></canvas>
+  <div class="hero-fade"></div>
+  <div class="hero-cap"><div class="wrap">
+    <span class="pill">MFCC · 16 kHz · 20 bins</span>
+    <span class="note">the features every model below reads</span>
+  </div></div>
+</div>
+
+<main class="wrap">
+  <div class="intro">
+    <p class="kicker">Speech ML · a companion note</p>
+    <h1>From GMMs to Whisper: working with voice in Python</h1>
+    <p>The same Gaussian Mixture Model from the leak-detection note was, for two decades, the engine of speech recognition itself. This traces the arc from that GMM to modern ASR — turning voice into words, into meaning, and flagging voice that doesn't belong — with the citation embedded in each code block.</p>
+  </div>
+
+  <section style="border-top:none">
+    <div class="through"><b>The through-line.</b> Every model here reads the same front-end: MFCCs — a handful of numbers per short frame of audio. A GMM, a Whisper transformer, and an Isolation Forest are just different back-ends bolted onto that shared representation. Learn the front-end once and the rest is swappable.</div>
+    <pre class="flow">raw audio (.wav)
+     │
+     ├─ MFCC features ──┬─▶ GMM / Isolation Forest      # anomaly &amp; speaker ID
+     │   (librosa)      │
+     │                  └─▶ Whisper ─▶ "the cat sat"     # words
+     │                                      │
+     └──────────────────────────────────────▶ NLP       # meaning: intent, sentiment, entities</pre>
+  </section>
+
+  <section>
+    <p class="step">Method 00 · the origin</p>
+    <h2>Before neural nets, a speaker was a GMM</h2>
+    <p>The direct ancestor of the leak-detection GMM. Classic speech systems fit one Gaussian Mixture per speaker (or, via GMM-HMM, per phoneme) over MFCC frames, then identified a voice by whichever model gave the highest likelihood. Same <span class="mono">sklearn.mixture.GaussianMixture</span>, pointed at audio.</p>
+    <p class="cite"><b>[1]</b> Reynolds &amp; Rose (1995), IEEE Trans. Speech &amp; Audio Processing 3(1):72–83 · doi:10.1109/89.365379</p>
+    <div class="code"><button class="cp">Copy</button><pre><code>"""
+The original speech model: a Gaussian Mixture over MFCC features.
+Ref: Reynolds, D. A. &amp; Rose, R. C. (1995). "Robust text-independent
+speaker identification using Gaussian mixture speaker models." IEEE
+Trans. Speech &amp; Audio Processing, 3(1), 72-83. doi:10.1109/89.365379
+"""
+import librosa, numpy as np
+from sklearn.mixture import GaussianMixture
+
+def mfcc_frames(path, n_mfcc=20):
+    y, sr = librosa.load(path, sr=16000)               # load + resample to 16 kHz
+    m = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc) # shape (n_mfcc, T)
+    return m.T                                          # one row per audio frame
+
+# fit one GMM per enrolled speaker, on that speaker's frames only
+enrolled = {name: GaussianMixture(n_components=8, covariance_type="diag",
+                                  reg_covar=1e-6, random_state=0).fit(mfcc_frames(f))
+            for name, f in {"alice": "alice.wav", "bob": "bob.wav"}.items()}
+
+# identify an unknown clip: highest mean log-likelihood wins
+frames = mfcc_frames("unknown.wav")
+who = max(enrolled, key=lambda name: enrolled[name].score(frames))
+print("most likely speaker:", who)</code></pre></div>
+  </section>
+
+  <section>
+    <p class="step">Method 01 · voice → words</p>
+    <h2>Whisper, the model that replaced the GMM-HMM</h2>
+    <p>Modern ASR collapses the whole GMM-HMM-plus-language-model stack into one network. In practice this is a one-liner — <span class="mono">pip install openai-whisper</span> — and it returns text with per-segment timestamps.</p>
+    <p class="cite"><b>[2]</b> Radford et al. (2023), arXiv:2212.04356 · OpenAI Whisper</p>
+    <div class="code"><button class="cp">Copy</button><pre><code>"""
+Voice -> words. One model replaces the entire GMM-HMM pipeline.
+Ref: Radford, A. et al. (2023). "Robust Speech Recognition via
+Large-Scale Weak Supervision." arXiv:2212.04356 (OpenAI Whisper).
+"""
+# pip install openai-whisper
+import whisper
+
+model  = whisper.load_model("base")     # tiny | base | small | medium | large
+result = model.transcribe("voice_memo.wav")
+
+print(result["text"])                    # the full transcript
+for seg in result["segments"]:           # ...with timestamps
+    print(f'[{seg["start"]:6.1f}s] {seg["text"].strip()}')
+
+# --- same thing inside the Hugging Face ecosystem ---
+# from transformers import pipeline
+# asr = pipeline("automatic-speech-recognition", model="openai/whisper-base")
+# print(asr("voice_memo.wav")["text"])</code></pre></div>
+  </section>
+
+  <section>
+    <p class="step">Method 02 · voice → meaning</p>
+    <h2>Chain the transcript into ordinary NLP</h2>
+    <p>There's no such thing as "NLP on raw audio" — you transcribe first, then run text models. The moment you have a string, sentiment, entities, intent, and summarization are all off-the-shelf.</p>
+    <p class="cite"><b>[3]</b> Baevski et al. (2020), wav2vec 2.0, arXiv:2006.11477 · NeurIPS 2020</p>
+    <div class="code"><button class="cp">Copy</button><pre><code>"""
+Voice -> meaning. Transcribe, then treat it as text.
+Chain: Whisper (audio->text) -> sentiment + named entities.
+"""
+from transformers import pipeline
+
+asr       = pipeline("automatic-speech-recognition", model="openai/whisper-base")
+sentiment = pipeline("sentiment-analysis")
+entities  = pipeline("ner", grouped_entities=True)
+
+text = asr("voice_memo.wav")["text"]
+print("words   :", text)
+print("feeling :", sentiment(text)[0])   # {'label': 'POSITIVE', 'score': 0.99}
+print("entities:", entities(text))       # people / places / orgs
+
+# Want meaning WITHOUT transcribing? wav2vec 2.0 gives embeddings
+# straight from audio -- Baevski et al. (2020), arXiv:2006.11477.</code></pre></div>
+  </section>
+
+  <section>
+    <p class="step">Method 03 · the synthesis</p>
+    <h2>Isolation Forest for voice anomaly detection</h2>
+    <p>This closes the loop: reuse the exact MFCC front-end from Method 00, summarize each clip into one fixed-length vector, and let an Isolation Forest flag clips that don't resemble the rest — an unfamiliar speaker, a spoof, a corrupted file.</p>
+    <p class="cite"><b>[4]</b> Liu, Ting &amp; Zhou (2008), Isolation Forest, IEEE ICDM · doi:10.1109/ICDM.2008.17</p>
+    <div class="code"><button class="cp">Copy</button><pre><code>"""
+Voice anomaly detection. SAME MFCC front-end as the GMM above --
+only the back-end model changes.
+Ref: Liu, F. T., Ting, K. M. &amp; Zhou, Z.-H. (2008). "Isolation Forest."
+IEEE Int. Conf. on Data Mining (ICDM). doi:10.1109/ICDM.2008.17
+"""
+import librosa, numpy as np
+from sklearn.ensemble import IsolationForest
+
+def clip_vector(path, n_mfcc=20):
+    y, sr = librosa.load(path, sr=16000)
+    m = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
+    # collapse the whole clip to one vector: per-coeff mean + spread
+    return np.concatenate([m.mean(axis=1), m.std(axis=1)])   # -> 2*n_mfcc dims
+
+clips = ["a.wav", "b.wav", "c.wav", "suspect.wav"]
+X = np.vstack([clip_vector(f) for f in clips])
+
+det   = IsolationForest(contamination=0.1, random_state=0).fit(X)
+flag  = det.predict(X)                # -1 = anomaly, 1 = normal
+score = det.decision_function(X)      # higher = more normal
+for f, fl, s in zip(clips, flag, score):
+    print(f"{f:12s} {s:+.3f}  " + ("ANOMALY" if fl == -1 else "ok"))
+
+# A GMM is a drop-in back-end on the SAME X -- the leak-detection code:
+#   from sklearn.mixture import GaussianMixture
+#   g  = GaussianMixture(4).fit(X)
+#   ll = g.score_samples(X)          # low log-likelihood = anomaly</code></pre></div>
+  </section>
+
+  <section>
+    <p class="step">Reference</p>
+    <h2>The five libraries this actually needs</h2>
+    <table class="libs">
+      <thead><tr><th>Job</th><th>Library</th><th>Why it, not something else</th></tr></thead>
+      <tbody>
+        <tr><td>Audio features (MFCC, spectrogram)</td><td class="lib">librosa</td><td>The standard audio front-end; feeds every model here.</td></tr>
+        <tr><td>Classical models — GMM, Isolation Forest</td><td class="lib">scikit-learn</td><td>Both live here; interchangeable on the same feature matrix.</td></tr>
+        <tr><td>Anomaly-detector toolbox</td><td class="lib">pyod</td><td>Optional. ~40 detectors, one API — only if comparing.</td></tr>
+        <tr><td>Speech → text (ASR)</td><td class="lib">openai-whisper / transformers</td><td>Pretrained; no training needed to transcribe.</td></tr>
+        <tr><td>Training your own nets</td><td class="lib">torch / tensorflow / jax</td><td>General DL engines — not vision-specific. Only when you train.</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px"><b style="color:var(--ink)">Which library, concretely.</b> Use <span class="mono">sklearn.ensemble.IsolationForest</span> — it's the standard, and it's the same one everything else wraps. Reach for PyOD only if you want to compare many detectors behind one API. You touch PyTorch/TensorFlow/JAX only if you're training your own neural model — never just to run one.</p>
+  </section>
+
+  <section>
+    <p class="step">References</p>
+    <ol class="refs">
+      <li>Reynolds, D. A., &amp; Rose, R. C. (1995). Robust text-independent speaker identification using Gaussian mixture speaker models. <em>IEEE Trans. Speech and Audio Processing</em>, 3(1), 72–83. doi:10.1109/89.365379</li>
+      <li>Radford, A., et al. (2023). Robust Speech Recognition via Large-Scale Weak Supervision. arXiv:2212.04356 (ICML 2023).</li>
+      <li>Baevski, A., Zhou, H., Mohamed, A., &amp; Auli, M. (2020). wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations. NeurIPS 2020; arXiv:2006.11477.</li>
+      <li>Liu, F. T., Ting, K. M., &amp; Zhou, Z.-H. (2008). Isolation Forest. <em>IEEE ICDM</em>, 413–422. doi:10.1109/ICDM.2008.17</li>
+      <li>McFee, B., et al. (2015). librosa: Audio and Music Signal Analysis in Python. <em>Proc. 14th Python in Science Conf. (SciPy)</em>. doi:10.25080/Majora-7b98e3ed-003</li>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Companion to the GMM leak-detection note — same document system, retuned for audio. Citations verified via IEEE Xplore, arXiv, and the SciPy proceedings at time of writing. The spectrogram above is a synthetic illustration, not real audio.</div>
+</footer>
+
+<script>
+  (function(){
+    const c=document.getElementById('spec'), x=c.getContext('2d');
+    const W=c.width,H=c.height, cols=240, rows=64, cw=W/cols, rh=H/rows;
+    const stops=[[6,4,20],[40,11,84],[122,28,109],[190,54,85],[240,110,60],[251,180,90],[252,246,196]];
+    function ramp(t){t=Math.max(0,Math.min(1,t));const s=t*(stops.length-1),i=Math.floor(s),f=s-i;
+      const a=stops[i],b=stops[Math.min(i+1,stops.length-1)];
+      return 'rgb('+(a[0]+(b[0]-a[0])*f|0)+','+(a[1]+(b[1]-a[1])*f|0)+','+(a[2]+(b[2]-a[2])*f|0)+')';}
+    function nz(a,b){return Math.sin(a*0.7)*Math.cos(b*0.35)+Math.sin(a*0.13+b*0.21)*0.7;}
+    for(let ci=0;ci<cols;ci++){
+      const f1=12+6*Math.sin(ci*0.05), f2=30+8*Math.sin(ci*0.03+1), f3=48+5*Math.cos(ci*0.06);
+      for(let ri=0;ri<rows;ri++){
+        const band=Math.exp(-((ri-f1)*(ri-f1))/8)+0.8*Math.exp(-((ri-f2)*(ri-f2))/12)+0.6*Math.exp(-((ri-f3)*(ri-f3))/10);
+        let v=band*(0.6+0.4*Math.random())*(0.5+0.5*nz(ci,ri));
+        v=Math.pow(Math.max(0,v),0.8);
+        x.fillStyle=ramp(v*0.9);
+        x.fillRect(ci*cw, H-(ri+1)*rh, cw+1, rh+1);
+      }
+    }
+  })();
+  document.querySelectorAll('.code .cp').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const code=btn.parentElement.querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(()=>{btn.textContent='Copied';btn.classList.add('ok');
+        setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},1400);});
+    });
+  });
+  function _report(){try{parent.postMessage({frame:'notes',h:document.body.scrollHeight},'*');}catch(e){}}
+  window.addEventListener('load',_report);window.addEventListener('resize',_report);
+  new ResizeObserver(_report).observe(document.body);
+</script>
+</body>
+</html>

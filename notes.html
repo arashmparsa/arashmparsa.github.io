@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes — Arash Parsa</title>
+<meta name="description" content="Technical notes and demos by Arash Parsa — verifiable-benchmark eval anatomy and a speech-ML companion note.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .notes-head{padding:44px 0 6px}
+  .notes-head h1{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:34px;
+    letter-spacing:-.02em;color:#16283f;margin:0}
+  .notes-head p{color:#6b7480;margin:10px 0 0;max-width:64ch}
+  .switch{display:flex;gap:6px;margin:22px 0 0;border-bottom:1px solid #e6e9ef;flex-wrap:wrap}
+  .switch button{appearance:none;background:none;border:0;cursor:pointer;
+    font-family:"Inter",sans-serif;font-size:15px;color:#24374f;padding:10px 14px;
+    border-bottom:2px solid transparent;margin-bottom:-1px}
+  .switch button:hover{color:#235f6b}
+  .switch button.on{color:#235f6b;font-weight:600;border-bottom-color:#2f7d8c}
+  .switch .tag{font-family:"JetBrains Mono",monospace;font-size:11px;color:#8a97a0;margin-left:7px}
+  .frames{position:relative;margin-top:4px}
+  iframe.frame{width:100%;border:0;display:none;min-height:70vh;background:#f7f9f9;
+    border-radius:0 0 14px 14px}
+  iframe.frame.on{display:block}
+  .frame-foot{max-width:860px;margin:4px auto 40px;padding:0 24px;color:#8a97a0;font-size:12.5px}
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">Arash Parsa</a>
+    <nav class="tabs">
+      <a href="index.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="projects.html">Projects</a>
+      <a href="notes.html" class="active">Notes</a>
+      <a href="cv.html">CV</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="notes-head">
+    <p class="eyebrow">Technical notes &amp; demos</p>
+    <h1>Notes</h1>
+    <p>Two working notes: the anatomy of a verifiable AI-agent benchmark eval, and a companion tracing speech ML from Gaussian mixtures to modern ASR. Use the tabs to switch.</p>
+    <div class="switch" role="tablist">
+      <button class="on" data-target="wt" role="tab" aria-selected="true">Eval walkthrough<span class="tag">benchmarks</span></button>
+      <button data-target="sp" role="tab" aria-selected="false">Speech ML<span class="tag">GMM → Whisper</span></button>
+    </div>
+  </div>
+</main>
+
+<div class="frames">
+  <iframe id="wt" class="frame on" src="walkthrough.html" title="Eval walkthrough" loading="eager"></iframe>
+  <iframe id="sp" class="frame" src="speech.html" title="Speech ML note" loading="lazy"></iframe>
+</div>
+
+<script>
+  // tab switching
+  const btns = document.querySelectorAll('.switch button');
+  const frames = document.querySelectorAll('iframe.frame');
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    btns.forEach(x=>{x.classList.remove('on');x.setAttribute('aria-selected','false')});
+    b.classList.add('on'); b.setAttribute('aria-selected','true');
+    frames.forEach(f=>f.classList.toggle('on', f.id===b.dataset.target));
+  }));
+  // size each iframe to its content (reported via postMessage)
+  window.addEventListener('message', e=>{
+    if(!e || !e.data || e.data.frame!=='notes') return;
+    frames.forEach(f=>{ if(f.contentWindow===e.source) f.style.height=(e.data.h+24)+'px'; });
+  });
+</script>
+</body>
+</html>

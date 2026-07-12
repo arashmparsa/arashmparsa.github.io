@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eval, end to end — TxBench-PP organoid IC50</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f9f9; --panel:#ffffff; --ink:#132430; --ink-soft:#33454f;
+    --muted:#6a7a83; --line:#e2e8ea; --line-soft:#eef2f3;
+    --assay:#0e8390;         /* optical/assay teal */
+    --assay-deep:#0a636d;
+    --pass:#1f9d57; --fail:#c9483a; --amber:#e0952f;
+    --amber-wash:#fbeecd;
+    --disp:"Space Grotesk", system-ui, sans-serif;
+    --body:"IBM Plex Sans", system-ui, sans-serif;
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+    --wrap:940px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  a{color:var(--assay-deep)}
+
+  /* ---- header ---- */
+  header.top{border-bottom:1px solid var(--line);background:
+    linear-gradient(180deg,#ffffff, #f7f9f9)}
+  .top-inner{max-width:var(--wrap);margin:0 auto;padding:40px 24px 30px}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--assay-deep);margin:0 0 14px}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(28px,5vw,44px);
+    line-height:1.05;letter-spacing:-.02em;margin:0 0 6px}
+  .evalid{font-family:var(--mono);font-size:13px;color:var(--muted);
+    word-break:break-all;margin:0 0 18px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+    padding:4px 10px;border-radius:999px;border:1px solid var(--line);
+    background:#fff;color:var(--ink-soft)}
+  .chip.k{color:var(--assay-deep);border-color:#bfe0e3;background:#effafa}
+
+  /* ---- section scaffold ---- */
+  section{padding:38px 0;border-top:1px solid var(--line-soft)}
+  .step{font-family:var(--mono);font-size:12px;color:var(--assay);
+    letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+  h2{font-family:var(--disp);font-weight:600;font-size:23px;letter-spacing:-.01em;
+    margin:0 0 14px}
+  p{margin:0 0 14px;max-width:68ch}
+  .lead{color:var(--ink-soft)}
+
+  /* ---- data card / montage signature ---- */
+  .montage{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px;box-shadow:0 18px 40px -30px rgba(19,36,48,.5)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .well{position:relative;aspect-ratio:1/1;border-radius:10px;background:#0c1a22;
+    overflow:hidden;border:1px solid #0a1319}
+  .well .lab{position:absolute;top:6px;left:8px;font-family:var(--mono);
+    font-size:11px;color:#cfe6e6;letter-spacing:.05em;z-index:2}
+  .dish{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .dish svg{width:82%;height:82%}
+  .org{fill:#7fd6c9}
+  .well.mark{outline:2px solid var(--amber);outline-offset:-2px}
+  .well.mark .tag{position:absolute;bottom:6px;right:8px;font-family:var(--mono);
+    font-size:10px;color:#111;background:var(--amber);padding:2px 6px;border-radius:5px;z-index:2}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;
+    font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .legend b{color:var(--ink)}
+
+  /* ---- code / grader ---- */
+  pre{background:#0e1c24;color:#d6e6e6;font-family:var(--mono);font-size:13px;
+    line-height:1.55;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:0 0 14px}
+  pre .k{color:#79d0c9}.pre .n{color:#e6c07b}
+  pre .n{color:#e6b980}pre .s{color:#a5d6a7}pre .c{color:#6d8791}
+  .callout{border-left:3px solid var(--assay);background:#eef8f8;
+    padding:12px 16px;border-radius:0 10px 10px 0;margin:0 0 14px}
+  .callout.amber{border-left-color:var(--amber);background:var(--amber-wash)}
+
+  /* ---- taxonomy chips ---- */
+  .tax{display:grid;gap:10px}
+  .tax .t{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff}
+  .tax .fam{font-family:var(--mono);font-size:12px;color:var(--assay-deep);
+    letter-spacing:.03em;margin-bottom:3px}
+  .tax .d{font-size:14px;color:var(--ink-soft)}
+
+  /* ---- results table ---- */
+  .tbl{width:100%;border-collapse:collapse;font-size:14.5px;
+    border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .tbl th,.tbl td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-soft)}
+  .tbl th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);background:#f3f7f7}
+  .tbl td.mono{font-family:var(--mono);font-size:13px}
+  .tbl tr:last-child td{border-bottom:0}
+  .verdict{font-family:var(--mono);font-size:12px;font-weight:600;
+    padding:3px 9px;border-radius:999px;display:inline-block}
+  .verdict.pass{color:#0d6b3b;background:#dff3e6}
+  .verdict.fail{color:#8f2c22;background:#fadfdb}
+
+  /* ---- step trace ---- */
+  ol.trace{list-style:none;counter-reset:s;margin:0;padding:0}
+  ol.trace li{counter-increment:s;position:relative;padding:0 0 16px 46px;
+    border-left:1px solid var(--line);margin-left:14px}
+  ol.trace li:last-child{border-left-color:transparent}
+  ol.trace li::before{content:counter(s);position:absolute;left:-14px;top:-2px;
+    width:28px;height:28px;border-radius:50%;background:var(--panel);
+    border:1px solid var(--assay);color:var(--assay-deep);
+    font-family:var(--mono);font-size:13px;display:flex;align-items:center;justify-content:center}
+  ol.trace li b{font-family:var(--disp);font-weight:600}
+
+  /* ---- surfaces ---- */
+  .surf{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .surf .s{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff}
+  .surf .s .h{font-family:var(--disp);font-weight:600;font-size:16px;margin-bottom:4px}
+  .surf .s .who{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:8px}
+  .surf .s.c1{border-top:3px solid var(--pass)}
+  .surf .s.c2{border-top:3px solid var(--fail)}
+  .surf .s.c3{border-top:3px solid var(--amber)}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:var(--muted);
+    font-size:13px}
+  .takeaway{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px}
+  .takeaway ul{margin:0;padding-left:20px}
+  .takeaway li{margin:8px 0;color:var(--ink-soft)}
+  .takeaway li b{color:var(--ink)}
+
+  .fade{opacity:0;transform:translateY(8px);animation:rise .6s ease forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  @media (max-width:640px){
+    .surf{grid-template-columns:1fr}
+    .tbl{font-size:13px}
+    .tbl th,.tbl td{padding:9px 10px}
+  }
+  @media (prefers-reduced-motion:reduce){.fade{animation:none;opacity:1;transform:none}}
+  @media print{body{background:#fff}pre{background:#f2f5f5;color:#132430}
+    .well{background:#eef3f3}.montage{box-shadow:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="kicker">Verifiable benchmark · one eval, end to end</p>
+    <h1>How a benchmark grades an agent</h1>
+    <p class="evalid mono">txbx_org_organoid_doseresponse_resistant_fraction</p>
+    <div class="chips">
+      <span class="chip k">image_analysis</span>
+      <span class="chip">stage: S9 · translational</span>
+      <span class="chip">grader: numeric_tolerance</span>
+      <span class="chip">4 models scored</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="fade">
+    <p class="step">01 · The task</p>
+    <h2>What the agent is asked to do</h2>
+    <p class="lead">The agent is handed one image — a 3×3 montage of brightfield organoid wells: three vehicle (untreated) controls followed by a six-point ascending dose series of a single compound, imaged after seven days of treatment. It must return exactly two numbers, as JSON, inside an <span class="mono">&lt;EVAL_ANSWER&gt;</span> tag:</p>
+    <pre><span class="c"># the structured answer the agent must emit</span>
+{
+  "ic50_dose_level": <span class="n">&lt;int 1–6&gt;</span>,          <span class="c"># lowest dose where viable response ≤ 50% of vehicle</span>
+  "resistant_population_present": <span class="n">&lt;0 or 1&gt;</span>  <span class="c"># 1 if viable organoids persist at the top dose</span>
+}</pre>
+    <p>It reads like "estimate an IC50 from a picture," but the real test is whether the agent can separate <em>live signal</em> from <em>artifacts</em> before it counts anything.</p>
+  </section>
+
+  <section class="fade">
+    <p class="step">02 · The data</p>
+    <h2>What the agent sees</h2>
+    <p class="lead">Viability falls as dose rises. Half-maximal response first appears at <b>Dose 3</b> — that's the IC50 level — and by <b>Dose 6</b> nothing viable remains, so no resistant population. The ground truth is readable straight off the plate.</p>
+    <div class="montage">
+      <div class="grid" id="grid" aria-label="3 by 3 montage of organoid wells"></div>
+      <div class="legend">
+        <span><b>V</b> vehicle control</span>
+        <span><b>D1–D6</b> ascending dose</span>
+        <span style="color:var(--amber)"><b>amber outline</b> — the two panels the answer hinges on</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="fade">
+    <p class="step">03 · The grader</p>
+    <h2>How the answer is scored — deterministically</h2>
+    <p class="lead">No LLM judge, no human. The grader is a small declarative spec. Here it's a single <span class="mono">numeric_tolerance</span> node with a tolerance of <b>0</b>, so each field must match ground truth exactly.</p>
+    <pre>{
+  <span class="k">"type"</span>: <span class="s">"numeric_tolerance"</span>,
+  <span class="k">"config"</span>: {
+    <span class="k">"tolerances"</span>: {
+      <span class="k">"ic50_dose_level"</span>:             { <span class="k">"type"</span>:<span class="s">"absolute"</span>, <span class="k">"value"</span>: <span class="n">0</span> },
+      <span class="k">"resistant_population_present"</span>: { <span class="k">"type"</span>:<span class="s">"absolute"</span>, <span class="k">"value"</span>: <span class="n">0</span> }
+    },
+    <span class="k">"ground_truth"</span>: { <span class="k">"ic50_dose_level"</span>: <span class="n">3</span>, <span class="k">"resistant_population_present"</span>: <span class="n">0</span> }
+  }
+}</pre>
+    <div class="callout"><b>Why this matters.</b> Because the correct answer and the checking logic are <em>data</em>, grading is reproducible and cheap. The same spec scores every model identically — the agent is the variable, the grader is fixed.</div>
+  </section>
+
+  <section class="fade">
+    <p class="step">04 · Failure-mode taxonomy</p>
+    <h2>The mistakes this eval is built to catch</h2>
+    <p class="lead">Separately from the grader, each eval is tagged with failure-mode labels from a shared, versioned taxonomy. They don't affect pass/fail — they let the benchmark ask "which kinds of mistakes do models make most?" across all evals. For an image/IC50 task, the relevant families are:</p>
+    <div class="tax">
+      <div class="t"><div class="fam">subset_scope_compartment</div><div class="d">Counting the wrong objects — e.g. treating dead debris or a plate artifact as viable organoids, inflating survival at high dose.</div></div>
+      <div class="t"><div class="fam">metric_statistic_mismatch</div><div class="d">Summarizing with the wrong quantity — e.g. using raw pixel area instead of viable-organoid signal, so the dose-response curve is distorted.</div></div>
+      <div class="t"><div class="fam">causal_epistemic_overreach</div><div class="d">Claiming more than the image supports — e.g. asserting a resistant subpopulation from noise rather than a defended viable count.</div></div>
+    </div>
+  </section>
+
+  <section class="fade">
+    <p class="step">05 · The runs</p>
+    <h2>Four frontier models attempt it</h2>
+    <p class="lead">Each model runs inside an agent harness with tools (Bash, Read, code execution). The grader then scores whatever it submits.</p>
+    <table class="tbl">
+      <thead><tr><th>Model</th><th>Harness</th><th>Submitted</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>Claude Opus 4.8</td><td class="mono">claude-code</td><td class="mono">{3, 0}</td><td><span class="verdict pass">PASS</span></td></tr>
+        <tr><td>GPT-5.5</td><td class="mono">openai-codex</td><td class="mono">{3, 1}</td><td><span class="verdict fail">FAIL</span></td></tr>
+        <tr><td>Gemini 3.5 Flash</td><td class="mono">pi</td><td class="mono">— (no answer)</td><td><span class="verdict fail">FAIL</span></td></tr>
+        <tr><td>Grok 4.3</td><td class="mono">pi</td><td class="mono">— (no answer)</td><td><span class="verdict fail">FAIL</span></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:14px">Ground truth was <span class="mono">{ic50_dose_level: 3, resistant_population_present: 0}</span>. One model cleared it.</p>
+  </section>
+
+  <section class="fade">
+    <p class="step">06 · Inside the winning run</p>
+    <h2>What the passing agent actually did</h2>
+    <p class="lead">Claude didn't eyeball the montage — it wrote Python (PIL, NumPy, SciPy) and reasoned its way past the traps.</p>
+    <ol class="trace">
+      <li><b>Segment.</b> Wrote code to threshold and label objects in each panel, aiming to quantify viable biomass per dose.</li>
+      <li><b>Catch the artifact.</b> A ~2,800-px "object" appeared in every panel — but it had uniform intensity, spanned the whole panel, and was only ~1% filled. That's the <span class="mono">panel border frame</span>, not an organoid. Counting it would force <span class="mono">resistant_population_present = 1</span>. It excluded the frame.</li>
+      <li><b>Viable vs. debris.</b> Separated genuine organoids (large, compact, textured, brighter) from dead fragments that proliferate under treatment and would inflate raw area.</li>
+      <li><b>Verify visually.</b> Saved a side-by-side strip of vehicle vs. high doses and read it back to confirm the quantification matched the picture.</li>
+      <li><b>Submit.</b> Viability crosses 50% at Dose 3; nothing viable survives at Dose 6 → <span class="mono">{3, 0}</span>.</li>
+    </ol>
+    <div class="callout amber"><b>The whole point in one line.</b> The task looks like reading an IC50; it actually measures whether the agent avoids the frame-artifact and debris confounders that produce a confident wrong answer.</div>
+  </section>
+
+  <section class="fade">
+    <p class="step">07 · Reading the failures</p>
+    <h2>Three different ways to fail</h2>
+    <p class="lead">The four runs surface the three failure surfaces every benchmark has to distinguish — and only the first is a biology mistake.</p>
+    <div class="surf">
+      <div class="s c1"><div class="h">Correct</div><div class="who">Claude Opus 4.8</div>Recovered <span class="mono">{3, 0}</span> — matched ground truth exactly.</div>
+      <div class="s c2"><div class="h">Wrong science</div><div class="who">GPT-5.5</div>Got the IC50 right but claimed a resistant population at the top dose (<span class="mono">{3, 1}</span>). A clean, interpretable error.</div>
+      <div class="s c3"><div class="h">Non-compliant</div><div class="who">Gemini 3.5 · Grok 4.3</div>Never emitted a parseable answer — only echoed the template. The <em>extractor's</em> job to catch, not the grader's.</div>
+    </div>
+  </section>
+
+  <section class="fade">
+    <div class="takeaway">
+      <p class="step">Takeaways</p>
+      <ul>
+        <li><b>An eval is a bundle:</b> a task, the input data, a deterministic grader, and failure-mode tags — the grader is the only part that decides pass/fail.</li>
+        <li><b>Ground truth + a grader = verifiability.</b> No human or model judge needed; every run is scored identically and reproducibly.</li>
+        <li><b>Answer extraction is part of validity.</b> Many "model failures" are really format failures; how you parse the submission decides whether a model is credited fairly.</li>
+        <li><b>The hard part is the confounder.</b> A good eval rewards the agent for handling the trap — and the grader proves it did.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Reconstructed from the public TxBench-PP eval and trajectories for study. Numbers reflect the organoid dose-response image-analysis task.</div>
+</footer>
+
+<script>
+  // Build the 3x3 montage. Viability (0..1) drives how many organoid "cells" render.
+  const wells = [
+    {lab:'V', v:1.0}, {lab:'V', v:1.0}, {lab:'V', v:0.95},
+    {lab:'D1', v:0.9}, {lab:'D2', v:0.72}, {lab:'D3', v:0.48, mark:'IC50'},
+    {lab:'D4', v:0.28}, {lab:'D5', v:0.12}, {lab:'D6', v:0.0, mark:'none survive'}
+  ];
+  const grid = document.getElementById('grid');
+  function rng(seed){ return () => (seed = (seed*9301+49297)%233280) / 233280; }
+  wells.forEach((w, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'well' + (w.mark ? ' mark' : '');
+    const n = Math.round(w.v * 9);           // number of organoids ~ viability
+    const r = rng(i*97+13);
+    let circles = '';
+    for(let k=0;k<n;k++){
+      const cx = 12 + r()*76, cy = 12 + r()*76, rad = 4 + r()*4;
+      const op = 0.55 + r()*0.45;
+      circles += `<circle class="org" cx="${cx}" cy="${cy}" r="${rad}" opacity="${op.toFixed(2)}"></circle>`;
+    }
+    cell.innerHTML =
+      `<span class="lab">${w.lab}</span>
+       <div class="dish"><svg viewBox="0 0 100 100">${circles}</svg></div>
+       ${w.mark ? `<span class="tag">${w.mark}</span>` : ''}`;
+    grid.appendChild(cell);
+  });
+  // report height to the Notes tab shell when embedded
+  function _report(){ try{ parent.postMessage({frame:'notes', h:document.body.scrollHeight}, '*'); }catch(e){} }
+  window.addEventListener('load', _report);
+  window.addEventListener('resize', _report);
+  new ResizeObserver(_report).observe(document.body);
+</script>
+</body>
+</html>
