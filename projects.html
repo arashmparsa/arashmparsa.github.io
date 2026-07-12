@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — Arash Parsa</title>
+<meta name="description" content="Selected computational biology and machine learning projects by Arash Parsa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">Arash Parsa</a>
+    <nav class="tabs">
+      <a href="index.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="cv.html">CV</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="page-head fade d1">
+    <p class="eyebrow">Selected work</p>
+    <h1>Projects</h1>
+    <p>A sample spanning clinical prediction, biomedical NLP, and core bioinformatics. Full code is on <a href="https://github.com/arashmparsa" target="_blank" rel="noopener">GitHub</a>.</p>
+  </div>
+
+  <section class="section fade d2" style="border-top:none;">
+
+    <div class="project">
+      <div class="project-top">
+        <h3>ICU Readmission Prediction from Clinical EHR Data (MIMIC-IV)</h3>
+        <span class="meta">2025–26</span>
+      </div>
+      <p>A 30-day ICU readmission model built on MIMIC-IV (300K+ critical-care admissions from Beth Israel Deaconess). Complex PostgreSQL queries join demographics, ICD diagnoses, labs, vitals, and medications into 40+ engineered clinical features. Logistic regression, random forest, and XGBoost are compared with cross-validated tuning (AUC 0.78 on held-out test), class imbalance handled with SMOTE and threshold tuning, and SHAP used to surface the top predictive drivers for clinical interpretability.</p>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">PostgreSQL</span><span class="tag">XGBoost</span><span class="tag">scikit-learn</span><span class="tag">SHAP</span><span class="tag">SMOTE</span><span class="tag">MIMIC-IV</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <h3>Spatial Transcriptomics Analysis of Human Brain Tissue</h3>
+        <span class="meta">2025–26</span>
+      </div>
+      <p>An end-to-end 10x Visium analysis of human dorsolateral prefrontal cortex (spatialLIBD): QC, normalization, and dimensionality reduction with Scanpy and Squidpy; spatially variable genes via Moran's I and SpatialDE; unsupervised clustering to delineate cortical-layer expression domains validated against histology; and a cell2location deconvolution pipeline estimating cell-type proportions per spot from paired scRNA-seq reference.</p>
+      <div class="tags">
+        <span class="tag">Scanpy</span><span class="tag">Squidpy</span><span class="tag">cell2location</span><span class="tag">SpatialDE</span><span class="tag">10x Visium</span><span class="tag">scRNA-seq</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <h3>Bulk RNA-seq Differential Expression Pipeline</h3>
+        <span class="meta">2025–26</span>
+      </div>
+      <p>A reproducible Nextflow pipeline for bulk RNA-seq: FastQC, Trimmomatic trimming, STAR alignment to GRCh38, and featureCounts quantification, followed by DESeq2 differential expression on a tumor-vs-normal GEO dataset (500+ significant DEGs at FDR &lt; 0.05). GO and KEGG enrichment via clusterProfiler, publication-quality volcano/MA plots and heatmaps, all containerized with Docker for full reproducibility.</p>
+      <div class="tags">
+        <span class="tag">Nextflow</span><span class="tag">STAR</span><span class="tag">DESeq2</span><span class="tag">clusterProfiler</span><span class="tag">Docker</span><span class="tag">R</span>
+      </div>
+    </div>
+
+    <div class="project">
+      <div class="project-top">
+        <h3>Multi-Class Text Classification with Traditional ML and Transformers</h3>
+        <span class="meta">2025–26</span>
+      </div>
+      <p>An NLP pipeline for news-topic classification on AG News (120K articles), comparing TF-IDF + logistic regression, embeddings + LSTM, and a fine-tuned DistilBERT (94% accuracy vs. 91% baseline). Includes a full preprocessing stack, misclassification analysis with confusion matrices and per-class F1, and deployment as a FastAPI REST service with a simple web interface, containerized with Docker.</p>
+      <div class="tags">
+        <span class="tag">HuggingFace</span><span class="tag">DistilBERT</span><span class="tag">PyTorch</span><span class="tag">FastAPI</span><span class="tag">Docker</span><span class="tag">NLP</span>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>© 2026 Arash Parsa</span>
+    <span>Built as a static site · hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+</body>
+</html>

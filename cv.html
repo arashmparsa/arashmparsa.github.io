@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV — Arash Parsa</title>
+<meta name="description" content="Experience, education, and skills — Arash Parsa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">Arash Parsa</a>
+    <nav class="tabs">
+      <a href="index.html">About</a>
+      <a href="publications.html">Publications</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.html" class="active">CV</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="page-head fade d1">
+    <p class="eyebrow">Curriculum vitae</p>
+    <h1>CV</h1>
+    <p>Two résumé variants, tailored to different roles. Download whichever fits.</p>
+    <div class="cv-actions" style="margin-top:16px;">
+      <a class="btn" href="assets/pdf/Arash_Parsa_Resume_general.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Résumé — Health / Informatics
+      </a>
+      <a class="btn ghost" href="assets/pdf/Arash_Parsa_Resume_bioinformatics.pdf" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Résumé — Bioinformatics
+      </a>
+    </div>
+  </div>
+
+  <section class="section fade d2" style="border-top:none;">
+    <h2 class="section-title">Experience</h2>
+
+    <div class="role">
+      <div class="when">2026 – Present</div>
+      <div>
+        <h3>Machine Learning Research Collaborator — Cost-Aware Clinical Phenotyping</h3>
+        <p class="org">Dr. Vivek Rudrapatna's Clinical Data Science Group, UCSF</p>
+        <ul>
+          <li>Independently scoped the cost bottleneck in EHR phenotyping and proposed a confidence-gated cascade as the solution.</li>
+          <li>Architected a four-stage pipeline: CPU BioBERT disease-NER → entity-guided retrieval → confidence-gated escalation to a frontier LLM → mention-level precision/recall/F1 evaluation with a token-cost proxy.</li>
+          <li>Early NCBI Disease pilot: escalating ~35% of notes raised precision 0.62 → 0.75 while consuming ~24% of the tokens a full frontier-LLM approach would require.</li>
+          <li>Engineered CPU-only, no-GPU deployment so the approach runs inside hospital firewalls; obtained PhysioNet credentialing for MIMIC-III/IV.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">Jan 2026 – Present</div>
+      <div>
+        <h3>Data Science Research Assistant, Clinical Research</h3>
+        <p class="org">In collaboration with Stanford-affiliated researchers</p>
+        <ul>
+          <li>Trichoscopic oculomics: deep-learning classification integrating spatial transcriptomics and metabolic epidemiology to reframe androgenetic alopecia as a systemic screening opportunity.</li>
+          <li>Endometriosis severity: supervised ML (random forest, gradient boosting, logistic regression) for preoperative phenotyping from EHR-derived features.</li>
+          <li>End-to-end clinical preprocessing — imputation, encoding, SMOTE, cross-validated evaluation — with results presented to clinical stakeholders.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">Dec 2025 – Mar 2026</div>
+      <div>
+        <h3>Machine Learning &amp; Data Science Research Assistant</h3>
+        <p class="org">Washington Lab, UCSF</p>
+        <ul>
+          <li>Systematic review cataloging architectures (CNNs, LSTMs, transformers), datasets, and benchmarks across 50+ studies on home-video ML classification of autism and ADHD.</li>
+          <li>Built Python tooling to standardize and visualize sensitivity/specificity/AUC across heterogeneous reporting formats; manuscript in preparation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">Sep 2022 – Present</div>
+      <div>
+        <h3>Machine Learning Scientist</h3>
+        <p class="org">Optelligence — Berkeley, CA</p>
+        <ul>
+          <li>Designed and trained supervised regression/classification models (XGBoost, neural networks) for performance prediction, cutting physical testing cycles by 50%.</li>
+          <li>Built end-to-end preprocessing pipelines and an A/B testing framework with statistical significance testing, improving deployment efficiency by 25%.</li>
+          <li>Applied CNNs and graph neural networks to extract latent structure from high-dimensional experimental measurements; SQL/PostgreSQL extraction and stakeholder dashboards.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">Aug 2021 – May 2022</div>
+      <div>
+        <h3>R&amp;D Engineer</h3>
+        <p class="org">Amgen &amp; ThermoFisher — Thousand Oaks &amp; Pleasanton, CA</p>
+        <ul>
+          <li>Automated QC workflows in Python/SQL, maintaining 99.8% assay accuracy across 100+ daily COVID-19 diagnostic samples.</li>
+          <li>Built SPC dashboards for HPLC/UPLC instrument drift, enabling early anomaly detection and reducing reagent waste by $50K annually.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">2018</div>
+      <div>
+        <h3>Research Assistant — Progesterone Biosynthesis (iGEM)</h3>
+        <p class="org">University of California, Santa Cruz</p>
+        <ul>
+          <li>Engineered <em>Y. lipolytica</em> for progesterone biosynthesis; designed a 5-gene cassette for heterologous expression.</li>
+          <li>Executed Gibson Assembly, yeast-mediated cloning, and Cre-Lox strategies, validated by colony PCR and Sanger sequencing; co-authored a 60-page research report.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">2016 – 2019</div>
+      <div>
+        <h3>Scientific Researcher &amp; Research Consultant</h3>
+        <p class="org">Apex Energetics — Irvine, CA</p>
+        <ul>
+          <li>Maintained a structured literature database of 200+ papers/month across 15+ nutraceutical compounds with NLP-assisted tagging.</li>
+          <li>Synthesized evidence across RCTs, meta-analyses, and in-vitro studies into quantitative reports, saving research leads ~20 hours/week.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="section fade d3">
+    <h2 class="section-title">Education</h2>
+    <div class="role">
+      <div class="when">2022 – 2025</div>
+      <div>
+        <h3>MS, Data Science &amp; Analytics</h3>
+        <p class="org">Georgia Institute of Technology — Atlanta, GA</p>
+      </div>
+    </div>
+    <div class="role">
+      <div class="when">2015 – 2021</div>
+      <div>
+        <h3>BS, Bioengineering / Bioinformatics</h3>
+        <p class="org">University of California, Santa Cruz</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Skills</h2>
+    <div class="skills">
+      <div class="skill-row"><span class="k">Programming</span><span class="v">Python, R, SQL, C++, MATLAB, Bash, JavaScript</span></div>
+      <div class="skill-row"><span class="k">Machine Learning</span><span class="v">scikit-learn, XGBoost, TensorFlow, PyTorch, HuggingFace Transformers, CNNs, GNNs, LLMs</span></div>
+      <div class="skill-row"><span class="k">Clinical NLP / Informatics</span><span class="v">BioBERT, NER, model cascades, benchmark design, EHR analysis, phenotyping, MIMIC-III/IV, n2c2</span></div>
+      <div class="skill-row"><span class="k">Bioinformatics &amp; Omics</span><span class="v">Scanpy, Squidpy, cell2location, DESeq2, clusterProfiler, STAR, 10x Visium, KEGG, GO</span></div>
+      <div class="skill-row"><span class="k">Data &amp; Statistics</span><span class="v">Pandas, NumPy, Matplotlib, Seaborn, PostgreSQL, hypothesis testing, A/B testing, feature engineering</span></div>
+      <div class="skill-row"><span class="k">Pipelines &amp; Infra</span><span class="v">Nextflow, Docker, Git, AWS, REST APIs, CI/CD, Linux</span></div>
+      <div class="skill-row"><span class="k">Molecular Biology</span><span class="v">PCR, Gibson Assembly, yeast transformation, Cre-Lox, CRISPR, plasmid cloning, Sanger sequencing</span></div>
+      <div class="skill-row"><span class="k">Synthetic Biology</span><span class="v">Metabolic pathway engineering, gene cassette design, heterologous expression, recombinant DNA</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>© 2026 Arash Parsa</span>
+    <span>Built as a static site · hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+</body>
+</html>
