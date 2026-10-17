@@ -4,11 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CV — Arash Parsa</title>
-<meta name="description" content="Experience, education, and skills — Arash Parsa.">
+<meta name="description" content="Arash Parsa — data scientist building ML systems for healthcare: clinical NLP, EHR modeling, and rigorous evaluation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .cv-summary { font-size: 17px; color: var(--text); max-width: 68ch; margin: 14px 0 0; }
+  .role li { margin: 6px 0; }
+  .certs { list-style: none; margin: 0; padding: 0; }
+  .certs li { padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 15px; }
+  .certs li:last-child { border-bottom: 0; }
+  .certs .who { font-weight: 600; color: var(--ink); }
+  .certs .code { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-left: 8px; }
+  .section-sub { font-family: var(--sans); font-weight: 400; font-size: 15px; color: var(--muted); }
+</style>
 </head>
 <body>
 
@@ -30,11 +40,11 @@
   <div class="page-head fade d1">
     <p class="eyebrow">Curriculum vitae</p>
     <h1>CV</h1>
-    <p>Two résumé variants, tailored to different roles. Download whichever fits.</p>
-    <div class="cv-actions" style="margin-top:16px;">
-      <a class="btn" href="assets/pdf/Arash_Parsa_Resume_general.pdf" target="_blank" rel="noopener">
+    <p class="cv-summary">Data scientist building ML systems for healthcare: clinical NLP, EHR modeling, and rigorous evaluation. Experience with Python, SQL/PostgreSQL, and production LLM testing.</p>
+    <div class="cv-actions" style="margin-top:18px;">
+      <a class="btn" href="assets/pdf/Arash_Parsa_Resume_DataScientist.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-        Résumé — Health / Informatics
+        Résumé — Data Scientist (PDF)
       </a>
       <a class="btn ghost" href="assets/pdf/Arash_Parsa_Resume_bioinformatics.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -44,18 +54,19 @@
   </div>
 
   <section class="section fade d2" style="border-top:none;">
-    <h2 class="section-title">Experience</h2>
+    <h2 class="section-title">Work Experience</h2>
 
     <div class="role">
-      <div class="when">2026 – Present</div>
+      <div class="when">Aug 2026 – Present</div>
       <div>
-        <h3>Machine Learning Research Collaborator — Cost-Aware Clinical Phenotyping</h3>
-        <p class="org">Dr. Vivek Rudrapatna's Clinical Data Science Group, UCSF</p>
+        <h3>AI Evaluation &amp; QA Intern</h3>
+        <p class="org">Veru365 · Fintech</p>
         <ul>
-          <li>Independently scoped the cost bottleneck in EHR phenotyping and proposed a confidence-gated cascade as the solution.</li>
-          <li>Architected a four-stage pipeline: CPU BioBERT disease-NER → entity-guided retrieval → confidence-gated escalation to a frontier LLM → mention-level precision/recall/F1 evaluation with a token-cost proxy.</li>
-          <li>Early NCBI Disease pilot: escalating ~35% of notes raised precision 0.62 → 0.75 while consuming ~24% of the tokens a full frontier-LLM approach would require.</li>
-          <li>Engineered CPU-only, no-GPU deployment so the approach runs inside hospital firewalls; obtained PhysioNet credentialing for MIMIC-III/IV.</li>
+          <li>Red-teamed production LLM financial agents; found compliance failures and verified fixes.</li>
+          <li>Designed adversarial evaluation datasets (197 refusal prompts; sycophancy and scope-evasion suites) adapted from published AI-safety benchmarks.</li>
+          <li>Built an LLM-as-judge pipeline: 97% accuracy at about 7× lower cost than a commercial testing tool.</li>
+          <li>Shipped bug fixes to the production backend of a fintech AI platform through code-reviewed pull requests.</li>
+          <li>Ran release QA and benchmarked AI testing vendors on cost and accuracy.</li>
         </ul>
       </div>
     </div>
@@ -63,12 +74,27 @@
     <div class="role">
       <div class="when">Jan 2026 – Present</div>
       <div>
-        <h3>Data Science Research Assistant, Clinical Research</h3>
-        <p class="org">In collaboration with Stanford-affiliated researchers</p>
+        <h3>Machine Learning Research Collaborator — Point-in-Time Clinical Trial Matching</h3>
+        <p class="org">Dr. Vivek Rudrapatna's Clinical Data Science Group, UCSF · San Francisco, CA</p>
         <ul>
-          <li>Trichoscopic oculomics: deep-learning classification integrating spatial transcriptomics and metabolic epidemiology to reframe androgenetic alopecia as a systemic screening opportunity.</li>
-          <li>Endometriosis severity: supervised ML (random forest, gradient boosting, logistic regression) for preoperative phenotyping from EHR-derived features.</li>
-          <li>End-to-end clinical preprocessing — imputation, encoding, SMOTE, cross-validated evaluation — with results presented to clinical stakeholders.</li>
+          <li>Opened a second workstream in the same collaboration and reframed trial matching as a <em>point-in-time</em> decision — “from only the notes written before hour <em>t</em>, is this patient screenable now?” — rather than retrospective derivation from discharge summaries, which are unavailable at the moment a screening decision is actually made.</li>
+          <li>Designed a criterion-conditioned attention model over timestamped note streams with per-head learned recency decay: a frozen encoder embeds and caches each note chunk once, so only a 1.8&nbsp;×&nbsp;10<sup>5</sup>-parameter head trains on CPU with no GPU and no LLM API at inference. Encoding is paid once per patient rather than once per patient×trial, so adding the 50th trial costs one criterion encode instead of another full pass over the census.</li>
+          <li>Beat both open-weight LLM generations at ∼10<sup>7</sup> times less inference compute: AUROC <strong>0.753</strong> [0.687, 0.810] versus 0.634 (Qwen2.5-7B) and 0.643 (Qwen3-8B) zero-shot over 363 paired patient–criterion decisions across 312 MIMIC-III patients, paired bootstrap deltas +0.119 and +0.109 with confidence intervals excluding zero; also clears an XGBoost-on-structured-labs baseline at 0.722.</li>
+          <li>Built the evaluation to attack its own result: identified that four of five eligibility criteria are defined by the very lab value they would be predicted from, so a naive run scores AUROC 1.000 and measures nothing, then reported results only on the criterion requiring clinical judgment and added leave-one-concept-out and note-volume-only null arms to catch accuracy that comes from counting notes rather than reading them.</li>
+          <li>Extended the same cached representations to a second task graded by an answer key the model never sees — whether a criterion is <em>ascertainable</em> at <em>t</em>, labeled exactly and at zero annotation cost from lab result timestamps (0.601 ± 0.008 over 2,505 decisions versus 0.504 for the volume-only control) — and showed that 14.5% of patient–criterion pairs change ascertainability status between hour 6 and hour 24, most of it evidence <em>expiring</em> rather than resolving. Split-conformal thresholding gives a distribution-free recall guarantee; manuscript in preparation with UCSF corpus validation planned.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="role">
+      <div class="when">Jan 2026 – Present</div>
+      <div>
+        <h3>Data Science Research Assistant in Clinical Research</h3>
+        <p class="org">In collaboration with Stanford-affiliated researchers · San Francisco, CA</p>
+        <ul>
+          <li>Trichoscopic Oculomics — built a deep learning classification pipeline integrating spatial transcriptomics and metabolic epidemiology features to reframe androgenetic alopecia as a systemic screening opportunity.</li>
+          <li>Endometriosis Severity Prediction — developed supervised ML models (random forest, gradient boosting, logistic regression) to phenotype and preoperatively predict endometriosis severity from clinical and demographic features extracted from EHR-derived datasets.</li>
+          <li>Performed end-to-end clinical data preprocessing: missing data imputation, feature encoding, class imbalance correction (SMOTE), and cross-validated model evaluation; presented results to clinical research stakeholders.</li>
         </ul>
       </div>
     </div>
@@ -77,23 +103,26 @@
       <div class="when">Dec 2025 – Mar 2026</div>
       <div>
         <h3>Machine Learning &amp; Data Science Research Assistant</h3>
-        <p class="org">Washington Lab, UCSF</p>
+        <p class="org">Washington Lab, UCSF · San Francisco, CA</p>
         <ul>
-          <li>Systematic review cataloging architectures (CNNs, LSTMs, transformers), datasets, and benchmarks across 50+ studies on home-video ML classification of autism and ADHD.</li>
-          <li>Built Python tooling to standardize and visualize sensitivity/specificity/AUC across heterogeneous reporting formats; manuscript in preparation.</li>
+          <li>Systematic review study: cataloged model architectures (CNNs, LSTMs, transformers), dataset characteristics, and performance benchmarks across 50+ studies on home video-based ML classification of autism and ADHD in pediatric populations.</li>
+          <li>Developed Python scripts to extract, standardize, and visualize study metrics (sensitivity, specificity, AUC) across heterogeneous reporting formats, enabling quantitative cross-study comparison for clinical decision support.</li>
+          <li>Manuscript to be submitted for publication in the near future.</li>
         </ul>
       </div>
     </div>
 
     <div class="role">
-      <div class="when">Sep 2022 – Present</div>
+      <div class="when">Sept 2022 – Present</div>
       <div>
         <h3>Machine Learning Scientist</h3>
-        <p class="org">Optelligence — Berkeley, CA</p>
+        <p class="org">Optelligence · Berkeley, CA</p>
         <ul>
-          <li>Designed and trained supervised regression/classification models (XGBoost, neural networks) for performance prediction, cutting physical testing cycles by 50%.</li>
-          <li>Built end-to-end preprocessing pipelines and an A/B testing framework with statistical significance testing, improving deployment efficiency by 25%.</li>
-          <li>Applied CNNs and graph neural networks to extract latent structure from high-dimensional experimental measurements; SQL/PostgreSQL extraction and stakeholder dashboards.</li>
+          <li>Designed and trained supervised regression and classification models (XGBoost, neural networks) for performance prediction, cutting physical testing cycles by 50%.</li>
+          <li>Built end-to-end data preprocessing pipelines in Python (Pandas, NumPy, scikit-learn) including feature engineering, outlier detection &amp; normalization across heterogeneous datasets.</li>
+          <li>Applied CNNs and graph neural networks in TensorFlow and PyTorch to extract latent structure from high-dimensional experimental measurements.</li>
+          <li>Constructed an A/B testing framework with statistical significance testing (t-tests, bootstrap CIs) to evaluate model variants, improving deployment efficiency by 25%.</li>
+          <li>Wrote SQL queries to extract and join data from PostgreSQL databases; created data visualizations and dashboards to communicate findings to cross-functional stakeholders.</li>
         </ul>
       </div>
     </div>
@@ -102,34 +131,11 @@
       <div class="when">Aug 2021 – May 2022</div>
       <div>
         <h3>R&amp;D Engineer</h3>
-        <p class="org">Amgen &amp; ThermoFisher — Thousand Oaks &amp; Pleasanton, CA</p>
+        <p class="org">Amgen &amp; ThermoFisher · Thousand Oaks, CA &amp; Pleasanton, CA</p>
         <ul>
-          <li>Automated QC workflows in Python/SQL, maintaining 99.8% assay accuracy across 100+ daily COVID-19 diagnostic samples.</li>
-          <li>Built SPC dashboards for HPLC/UPLC instrument drift, enabling early anomaly detection and reducing reagent waste by $50K annually.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="role">
-      <div class="when">2018</div>
-      <div>
-        <h3>Research Assistant — Progesterone Biosynthesis (iGEM)</h3>
-        <p class="org">University of California, Santa Cruz</p>
-        <ul>
-          <li>Engineered <em>Y. lipolytica</em> for progesterone biosynthesis; designed a 5-gene cassette for heterologous expression.</li>
-          <li>Executed Gibson Assembly, yeast-mediated cloning, and Cre-Lox strategies, validated by colony PCR and Sanger sequencing; co-authored a 60-page research report.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="role">
-      <div class="when">2016 – 2019</div>
-      <div>
-        <h3>Scientific Researcher &amp; Research Consultant</h3>
-        <p class="org">Apex Energetics — Irvine, CA</p>
-        <ul>
-          <li>Maintained a structured literature database of 200+ papers/month across 15+ nutraceutical compounds with NLP-assisted tagging.</li>
-          <li>Synthesized evidence across RCTs, meta-analyses, and in-vitro studies into quantitative reports, saving research leads ~20 hours/week.</li>
+          <li>Automated quality control workflows using Python and SQL, reducing manual review time and maintaining 99.8% assay accuracy across 100+ daily COVID-19 diagnostic samples.</li>
+          <li>Developed statistical process control (SPC) dashboards to monitor HPLC/UPLC instrument drift, enabling early anomaly detection and reducing reagent waste by $50K annually.</li>
+          <li>Performed multivariate data analysis on chromatography outputs using R and Excel; identified systematic variance sources, optimized parameters through iterative experimentation, and presented findings and recommendations to cross-functional clinical and laboratory stakeholders.</li>
         </ul>
       </div>
     </div>
@@ -137,12 +143,33 @@
   </section>
 
   <section class="section fade d3">
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="skills">
+      <div class="skill-row"><span class="k">Programming</span><span class="v">Python, R, SQL, C++, MATLAB, Bash, JavaScript</span></div>
+      <div class="skill-row"><span class="k">Data Science &amp; Statistics</span><span class="v">Statistical modeling, hypothesis testing, A/B testing, experimental design, feature engineering, time series analysis, cross-validation</span></div>
+      <div class="skill-row"><span class="k">Data Analysis &amp; Visualization</span><span class="v">Pandas, NumPy, Matplotlib, Seaborn, PostgreSQL, MS SQL Server, Redis, Excel, dashboard development</span></div>
+      <div class="skill-row"><span class="k">Machine Learning &amp; AI</span><span class="v">scikit-learn, XGBoost, TensorFlow, PyTorch, HuggingFace Transformers, LLMs, classification, regression, clustering, NLP, deep learning, CNNs, graph neural networks, predictive modeling</span></div>
+      <div class="skill-row"><span class="k">Pipeline, Cloud &amp; Reproducibility</span><span class="v">Nextflow, Docker, Git, Linux, AWS, REST APIs</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Domain Knowledge</h2>
+    <div class="skills">
+      <div class="skill-row"><span class="k">Bioinformatics &amp; Omics</span><span class="v">Scanpy, Squidpy, cell2location, SpatialDE, DESeq2, clusterProfiler, STAR, featureCounts, FastQC, Trimmomatic, KEGG, Gene Ontology, sequence alignment, genome analysis, primer design</span></div>
+      <div class="skill-row"><span class="k">Spatial Transcriptomics</span><span class="v">10x Visium, spatially variable gene detection, cell-type deconvolution, spatial clustering, tissue domain identification</span></div>
+      <div class="skill-row"><span class="k">Clinical NLP &amp; Health Informatics</span><span class="v">BioBERT, named entity recognition, model cascades, benchmark design, MIMIC-III/IV, n2c2, EHR data analysis, patient phenotyping, clinical decision support, health data standards</span></div>
+      <div class="skill-row"><span class="k">Molecular &amp; Synthetic Biology</span><span class="v">PCR, Gibson Assembly, yeast transformation, Cre-Lox, gel electrophoresis, Sanger sequencing, CRISPR, plasmid cloning, metabolic pathway engineering, gene cassette design, heterologous expression, recombinant DNA</span></div>
+    </div>
+  </section>
+
+  <section class="section">
     <h2 class="section-title">Education</h2>
     <div class="role">
       <div class="when">2022 – 2025</div>
       <div>
         <h3>MS, Data Science &amp; Analytics</h3>
-        <p class="org">Georgia Institute of Technology — Atlanta, GA</p>
+        <p class="org">Georgia Institute of Technology</p>
       </div>
     </div>
     <div class="role">
@@ -155,17 +182,13 @@
   </section>
 
   <section class="section">
-    <h2 class="section-title">Skills</h2>
-    <div class="skills">
-      <div class="skill-row"><span class="k">Programming</span><span class="v">Python, R, SQL, C++, MATLAB, Bash, JavaScript</span></div>
-      <div class="skill-row"><span class="k">Machine Learning</span><span class="v">scikit-learn, XGBoost, TensorFlow, PyTorch, HuggingFace Transformers, CNNs, GNNs, LLMs</span></div>
-      <div class="skill-row"><span class="k">Clinical NLP / Informatics</span><span class="v">BioBERT, NER, model cascades, benchmark design, EHR analysis, phenotyping, MIMIC-III/IV, n2c2</span></div>
-      <div class="skill-row"><span class="k">Bioinformatics &amp; Omics</span><span class="v">Scanpy, Squidpy, cell2location, DESeq2, clusterProfiler, STAR, 10x Visium, KEGG, GO</span></div>
-      <div class="skill-row"><span class="k">Data &amp; Statistics</span><span class="v">Pandas, NumPy, Matplotlib, Seaborn, PostgreSQL, hypothesis testing, A/B testing, feature engineering</span></div>
-      <div class="skill-row"><span class="k">Pipelines &amp; Infra</span><span class="v">Nextflow, Docker, Git, AWS, REST APIs, CI/CD, Linux</span></div>
-      <div class="skill-row"><span class="k">Molecular Biology</span><span class="v">PCR, Gibson Assembly, yeast transformation, Cre-Lox, CRISPR, plasmid cloning, Sanger sequencing</span></div>
-      <div class="skill-row"><span class="k">Synthetic Biology</span><span class="v">Metabolic pathway engineering, gene cassette design, heterologous expression, recombinant DNA</span></div>
-    </div>
+    <h2 class="section-title">Certifications <span class="section-sub">(Forage job simulations)</span></h2>
+    <ul class="certs">
+      <li><span class="who">BCG X</span> — Data Science Job Simulation · June 15, 2026<span class="code">Enrolment: fciegf6TTYjpzDNA2</span></li>
+      <li><span class="who">J.P. Morgan</span> — Quantitative Research Job Simulation · June 15, 2026<span class="code">Enrolment: RJeiTdDMcvgsrqKfE</span></li>
+      <li><span class="who">Deloitte</span> — Data Analytics Job Simulation · June 15, 2026<span class="code">Enrolment: ErcGTooquAqG4iJof</span></li>
+      <li><span class="who">British Airways</span> — Data Science Job Simulation · June 20, 2026<span class="code">Enrolment: GtJ3QQsQ4qrrr6Nzf</span></li>
+    </ul>
   </section>
 
 </main>
