@@ -324,3 +324,6 @@ a:focus-visible, .btn:focus-visible, .tabs a:focus-visible {
 /* site-wide Georgia; code stays monospace */
 :where(body, body *) { font-family: Georgia, "Times New Roman", serif !important; }
 pre, pre *, code, code *, kbd, samp { font-family: "Cascadia Code", Consolas, Menlo, monospace !important; }
+
+/* highlighter mark */
+mark.hl { background: #fff1a8; color: inherit; padding: 1px 3px; border-radius: 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
