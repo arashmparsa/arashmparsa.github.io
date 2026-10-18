@@ -32,7 +32,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   font-family: var(--sans);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.65;
   color: var(--text);
   background: var(--bg);
@@ -320,3 +320,7 @@ a:focus-visible, .btn:focus-visible, .tabs a:focus-visible {
   * { scroll-behavior: auto !important; }
   .fade { animation: none; opacity: 1; transform: none; }
 }
+
+/* site-wide Georgia; code stays monospace */
+:where(body, body *) { font-family: Georgia, "Times New Roman", serif !important; }
+pre, pre *, code, code *, kbd, samp { font-family: "Cascadia Code", Consolas, Menlo, monospace !important; }
