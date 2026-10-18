@@ -97,6 +97,19 @@ pre, pre *, code, code *, kbd, samp { font-family: "Cascadia Code", Consolas, Me
 </style>
 <script>if (window.self !== window.top) document.documentElement.classList.add('embedded');</script>
 <style>html.embedded{--wrap:860px}</style>
+<style>
+  /* light theme: matches the site's white pages; code blocks stay dark like the walkthrough */
+  :root{--bg:#ffffff;--panel:#f6f8f8;--code:#1e1e1e;--raise:#f3f7f7;
+    --ink:#16283f;--soft:#33454f;--muted:#6b7480;--line:#e3e8ec;
+    --signal:#b8661e;--cyan:#235f6b}
+  h1{background:none;-webkit-text-fill-color:currentColor;color:var(--ink)}
+  .hero-fade{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.9))}
+  .pill{color:#fff}
+  .through{background:#fdf5ec}
+  .code pre{border-color:#1e1e1e}
+  .code .cp{background:#2a2118;border-color:#4a3720;color:#f2a75c}
+  pre.flow{color:var(--soft)}
+</style>
 </head>
 <body>
 
@@ -283,7 +296,7 @@ for f, fl, s in zip(clips, flag, score):
   (function(){
     const c=document.getElementById('spec'), x=c.getContext('2d');
     const W=c.width,H=c.height, cols=240, rows=64, cw=W/cols, rh=H/rows;
-    const stops=[[6,4,20],[40,11,84],[122,28,109],[190,54,85],[240,110,60],[251,180,90],[252,246,196]];
+    const stops=[[255,255,255],[226,240,241],[170,212,215],[90,160,170],[47,125,140],[35,95,107],[19,58,68]];
     function ramp(t){t=Math.max(0,Math.min(1,t));const s=t*(stops.length-1),i=Math.floor(s),f=s-i;
       const a=stops[i],b=stops[Math.min(i+1,stops.length-1)];
       return 'rgb('+(a[0]+(b[0]-a[0])*f|0)+','+(a[1]+(b[1]-a[1])*f|0)+','+(a[2]+(b[2]-a[2])*f|0)+')';}
