@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CV — Arash Parsa</title>
-<meta name="description" content="Arash Parsa — data scientist building ML systems for healthcare: clinical NLP, EHR modeling, and rigorous evaluation.">
+<meta name="description" content="CV of Arash Parsa, ML engineer and applied data scientist: LLM agents, RAG and evaluation; clinical ML at UCSF.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -40,11 +40,11 @@
   <div class="page-head fade d1">
     <p class="eyebrow">Curriculum vitae</p>
     <h1>CV</h1>
-    <p class="cv-summary">Data scientist building ML systems for healthcare: clinical NLP, EHR modeling, and rigorous evaluation. Experience with Python, SQL/PostgreSQL, and production LLM testing.</p>
+    <p class="cv-summary">ML Engineer / Applied Data Scientist: I develop machine learning systems, RAG knowledge bases and LLM agents, and evaluate them in production; clinical ML at UCSF.</p>
     <div class="cv-actions" style="margin-top:18px;">
       <a class="btn" href="assets/pdf/Arash_Parsa_Resume_DataScientist.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-        Résumé — Data Scientist (PDF)
+        Résumé — ML Engineer / Data Scientist (PDF)
       </a>
       <a class="btn ghost" href="assets/pdf/Arash_Parsa_Resume_bioinformatics.pdf" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
@@ -59,14 +59,19 @@
     <div class="role">
       <div class="when">Aug 2026 – Present</div>
       <div>
-        <h3>AI Evaluation &amp; QA Intern</h3>
+        <h3>Engineering Lead — AI Research &amp; Agent Behavior</h3>
         <p class="org">Veru365 · Fintech</p>
         <ul>
-          <li>Red-teamed production LLM financial agents; found compliance failures and verified fixes.</li>
-          <li>Designed adversarial evaluation datasets (197 refusal prompts; sycophancy and scope-evasion suites) adapted from published AI-safety benchmarks.</li>
           <li>Built an LLM-as-judge pipeline: 97% accuracy at about 7× lower cost than a commercial testing tool.</li>
-          <li>Shipped bug fixes to the production backend of a fintech AI platform through code-reviewed pull requests.</li>
-          <li>Ran release QA and benchmarked AI testing vendors on cost and accuracy.</li>
+          <li>Debugged six-plus malfunctions in the production backend, a LangGraph agent graph with a coordinator and goal/risk/scenario/tax sub-agents.</li>
+          <li>Analyzed permission-aware retrieval in the production RAG stack: traced where retrieval filtered on organization rather than on the advisor–client relationship, and designed a relationship-based access control (ReBAC) fix that carries user identity through every sub-agent retrieval.</li>
+          <li>Built a retrieval-augmented generation (RAG) knowledge base on the neuroscience of money: 30+ verified sources written as citation-footnoted Markdown in the heading-chunked format the production backend already ingests, with a demo in which the model answers real client questions only from those sources.</li>
+          <li>Built a runtime guard inside the agent pipeline to mitigate proxy bias and stale binding, with in-house fairness evaluation of the RAG financial agent.</li>
+          <li>Shipped bug fixes to the production backend through code-reviewed pull requests and ran release QA; lead the intern team, assigning source collection and indexing while owning the knowledge-base structure and demo.</li>
+          <li>Red-teamed production LLM financial agents on staging with scripted multi-turn suites (panic selling, sustained user pressure, AI-identity disclosure across client personas); found compliance failures and verified fixes.</li>
+          <li>Designed adversarial evaluation datasets (197 refusal prompts; sycophancy and scope-evasion suites) adapted from published AI-safety benchmarks.</li>
+          <li>Benchmarked AI testing vendors on cost and accuracy (billed credits 1.26–1.7× the reported usage; grader verdicts flipped on 9 of 40 reruns) and wrote the purchase recommendation.</li>
+          <li>Public reimplementations of this work (no Veru code or data): agent-permission-gateway (default-deny tool permissions, PII tokenization, hash-chained audit log) and pushback-eval (multi-turn sycophancy eval with a validated grader).</li>
         </ul>
       </div>
     </div>
@@ -75,39 +80,38 @@
       <div class="when">Jan 2026 – Present</div>
       <div>
         <h3>Machine Learning Research Collaborator — Point-in-Time Clinical Trial Matching</h3>
-        <p class="org">Dr. Vivek Rudrapatna's Clinical Data Science Group, UCSF · San Francisco, CA</p>
+        <p class="org">Clinical Data Science Group, UCSF · San Francisco, CA</p>
         <ul>
           <li>Opened a second workstream in the same collaboration and reframed trial matching as a <em>point-in-time</em> decision — “from only the notes written before hour <em>t</em>, is this patient screenable now?” — rather than retrospective derivation from discharge summaries, which are unavailable at the moment a screening decision is actually made.</li>
           <li>Designed a criterion-conditioned attention model over timestamped note streams with per-head learned recency decay: a frozen encoder embeds and caches each note chunk once, so only a 1.8&nbsp;×&nbsp;10<sup>5</sup>-parameter head trains on CPU with no GPU and no LLM API at inference. Encoding is paid once per patient rather than once per patient×trial, so adding the 50th trial costs one criterion encode instead of another full pass over the census.</li>
           <li>Beat both open-weight LLM generations at ∼10<sup>7</sup> times less inference compute: AUROC <strong>0.753</strong> [0.687, 0.810] versus 0.634 (Qwen2.5-7B) and 0.643 (Qwen3-8B) zero-shot over 363 paired patient–criterion decisions across 312 MIMIC-III patients, paired bootstrap deltas +0.119 and +0.109 with confidence intervals excluding zero; also clears an XGBoost-on-structured-labs baseline at 0.722.</li>
           <li>Built the evaluation to attack its own result: identified that four of five eligibility criteria are defined by the very lab value they would be predicted from, so a naive run scores AUROC 1.000 and measures nothing, then reported results only on the criterion requiring clinical judgment and added leave-one-concept-out and note-volume-only null arms to catch accuracy that comes from counting notes rather than reading them.</li>
           <li>Extended the same cached representations to a second task graded by an answer key the model never sees — whether a criterion is <em>ascertainable</em> at <em>t</em>, labeled exactly and at zero annotation cost from lab result timestamps (0.601 ± 0.008 over 2,505 decisions versus 0.504 for the volume-only control) — and showed that 14.5% of patient–criterion pairs change ascertainability status between hour 6 and hour 24, most of it evidence <em>expiring</em> rather than resolving. Split-conformal thresholding gives a distribution-free recall guarantee; manuscript in preparation with UCSF corpus validation planned.</li>
+          <li>Ran batch inference on RunPod GPU cloud with Hugging Face Transformers, and am developing a change-management methodology for deploying the model into hospital and clinical infrastructure.</li>
         </ul>
       </div>
     </div>
 
     <div class="role">
-      <div class="when">Jan 2026 – Present</div>
+      <div class="when">Mar 2026 – Present</div>
       <div>
-        <h3>Data Science Research Assistant in Clinical Research</h3>
-        <p class="org">In collaboration with Stanford-affiliated researchers · San Francisco, CA</p>
+        <h3>Machine Learning Collaborator — Blood Raman Spectroscopy for Lung Cancer</h3>
+        <p class="org">National Central University (Taiwan) · Remote</p>
         <ul>
-          <li>Trichoscopic Oculomics — built a deep learning classification pipeline integrating spatial transcriptomics and metabolic epidemiology features to reframe androgenetic alopecia as a systemic screening opportunity.</li>
-          <li>Endometriosis Severity Prediction — developed supervised ML models (random forest, gradient boosting, logistic regression) to phenotype and preoperatively predict endometriosis severity from clinical and demographic features extracted from EHR-derived datasets.</li>
-          <li>Performed end-to-end clinical data preprocessing: missing data imputation, feature encoding, class imbalance correction (SMOTE), and cross-validated model evaluation; presented results to clinical research stakeholders.</li>
+          <li>Reproduced the group's Raman preprocessing and benchmarked PCA+SVM, XGBoost, and random forest classifiers; random forest raised internal 5-fold cross-validated accuracy from 80.1% to 87.2%.</li>
+          <li>Validated on 572 blood samples (482 internal, 90 external): AUC 0.933 internal and 0.917 external (sensitivity 0.825, specificity 0.880); detected 24 of 24 stage II–IV cancers versus 9 of 16 stage 0/I, where the CEA blood marker flagged none of the 16 early cases.</li>
+          <li>Stress-tested the result: leave-one-calibration-out validation fell to AUC 0.66, exposing dependence on day-level instrument calibration; co-author on the resulting manuscript (in preparation).</li>
         </ul>
       </div>
     </div>
 
     <div class="role">
-      <div class="when">Dec 2025 – Mar 2026</div>
+      <div class="when">Oct 2026 – Present</div>
       <div>
-        <h3>Machine Learning &amp; Data Science Research Assistant</h3>
-        <p class="org">Washington Lab, UCSF · San Francisco, CA</p>
+        <h3>Research Volunteer</h3>
+        <p class="org">UCSF Ophthalmology · San Francisco, CA</p>
         <ul>
-          <li>Systematic review study: cataloged model architectures (CNNs, LSTMs, transformers), dataset characteristics, and performance benchmarks across 50+ studies on home video-based ML classification of autism and ADHD in pediatric populations.</li>
-          <li>Developed Python scripts to extract, standardize, and visualize study metrics (sensitivity, specificity, AUC) across heterogeneous reporting formats, enabling quantitative cross-study comparison for clinical decision support.</li>
-          <li>Manuscript to be submitted for publication in the near future.</li>
+          <li>Image analysis for aqueous outflow imaging (particle image velocimetry).</li>
         </ul>
       </div>
     </div>
@@ -149,7 +153,9 @@
       <div class="skill-row"><span class="k">Data Science &amp; Statistics</span><span class="v">Statistical modeling, hypothesis testing, A/B testing, experimental design, feature engineering, time series analysis, cross-validation</span></div>
       <div class="skill-row"><span class="k">Data Analysis &amp; Visualization</span><span class="v">Pandas, NumPy, Matplotlib, Seaborn, PostgreSQL, MS SQL Server, Redis, Excel, dashboard development</span></div>
       <div class="skill-row"><span class="k">Machine Learning &amp; AI</span><span class="v">scikit-learn, XGBoost, TensorFlow, PyTorch, HuggingFace Transformers, LLMs, classification, regression, clustering, NLP, deep learning, CNNs, graph neural networks, predictive modeling</span></div>
+      <div class="skill-row"><span class="k">LLM Evaluation &amp; Retrieval</span><span class="v">Retrieval-augmented generation (RAG), heading-chunked Markdown knowledge bases, LLM-as-judge, red-teaming, adversarial test sets, permission-aware retrieval</span></div>
       <div class="skill-row"><span class="k">Pipeline, Cloud &amp; Reproducibility</span><span class="v">Nextflow, Docker, Git, Linux, AWS, REST APIs</span></div>
+      <div class="skill-row"><span class="k">Hardware &amp; Embedded Systems</span><span class="v">PCB design (KiCad, EasyEDA, Cadence; four-layer boards), microcontroller firmware in C++ (Teensy, Arduino), embedded data acquisition, sensor signal processing, Kalman filtering</span></div>
     </div>
   </section>
 
@@ -159,6 +165,8 @@
       <div class="skill-row"><span class="k">Bioinformatics &amp; Omics</span><span class="v">Scanpy, Squidpy, cell2location, SpatialDE, DESeq2, clusterProfiler, STAR, featureCounts, FastQC, Trimmomatic, KEGG, Gene Ontology, sequence alignment, genome analysis, primer design</span></div>
       <div class="skill-row"><span class="k">Spatial Transcriptomics</span><span class="v">10x Visium, spatially variable gene detection, cell-type deconvolution, spatial clustering, tissue domain identification</span></div>
       <div class="skill-row"><span class="k">Clinical NLP &amp; Health Informatics</span><span class="v">BioBERT, named entity recognition, model cascades, benchmark design, MIMIC-III/IV, n2c2, EHR data analysis, patient phenotyping, clinical decision support, health data standards</span></div>
+      <div class="skill-row"><span class="k">Biophotonics</span><span class="v">Raman spectroscopy of blood, spectral preprocessing, external validation of diagnostic classifiers</span></div>
+      <div class="skill-row"><span class="k">Financial Industry</span><span class="v">Automating financial advice and customer care for wealth management, RAG knowledge bases, in-house LLM fairness evaluation, model evaluation datasets</span></div>
       <div class="skill-row"><span class="k">Molecular &amp; Synthetic Biology</span><span class="v">PCR, Gibson Assembly, yeast transformation, Cre-Lox, gel electrophoresis, Sanger sequencing, CRISPR, plasmid cloning, metabolic pathway engineering, gene cassette design, heterologous expression, recombinant DNA</span></div>
     </div>
   </section>
@@ -183,8 +191,13 @@
   </section>
 
   <section class="section">
-    <h2 class="section-title">Certifications <span class="section-sub">(Forage job simulations)</span></h2>
+    <h2 class="section-title">Certifications <span class="section-sub">(Anthropic Academy; CITI Program; Forage job simulations)</span></h2>
     <ul class="certs">
+      <li><span class="who">Anthropic</span> — Claude Code in Action · November 25, 2026<span class="code">Credential ID: bx8cxjjpimu9</span></li>
+      <li><span class="who">Anthropic</span> — Model Context Protocol: Advanced Topics · November 25, 2026<span class="code">Credential ID: 47o585jy3ik4</span></li>
+      <li><span class="who">Anthropic</span> — Building with the Claude API · November 24, 2026<span class="code">Credential ID: smqoiv58333a</span></li>
+      <li><span class="who">CITI Program</span> — Data or Specimens Only Research · July 2026 (expires July 2029)<span class="code">Credential IDs: 78447852, 78505436</span></li>
+      <li><span class="who">CITI Program</span> — Conflicts of Interest · July 2026 (expires July 2030)<span class="code">Credential ID: 78505437</span></li>
       <li><span class="who">BCG X</span> — Data Science Job Simulation · June 15, 2026<span class="code">Enrolment: fciegf6TTYjpzDNA2</span></li>
       <li><span class="who">J.P. Morgan</span> — Quantitative Research Job Simulation · June 15, 2026<span class="code">Enrolment: RJeiTdDMcvgsrqKfE</span></li>
       <li><span class="who">Deloitte</span> — Data Analytics Job Simulation · June 15, 2026<span class="code">Enrolment: ErcGTooquAqG4iJof</span></li>
